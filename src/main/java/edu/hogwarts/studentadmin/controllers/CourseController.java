@@ -134,7 +134,7 @@ public class CourseController {
             }
         }
 
-    // delete course
+    // delete course (you have to press a couple of times in postman ¯\_(ツ)_/¯
     @DeleteMapping("/{id}")
     public ResponseEntity<Course> deleteCourse(@PathVariable int id) {
         Optional<Course> courseOptional = courseRepository.findById(id);

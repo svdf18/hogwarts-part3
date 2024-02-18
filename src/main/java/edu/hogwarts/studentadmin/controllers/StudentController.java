@@ -47,6 +47,7 @@ public class StudentController {
         }
     }
 
+    // doesnt work with new house_id.. fix later
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student, @RequestParam(name = "house_id") int houseId) {
         House house = houseRepository.findById(houseId).orElse(null);
@@ -60,6 +61,7 @@ public class StudentController {
         }
     }
 
+    // doesnt work with new house_id.. fix later
     @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
         Optional<Student> existingStudentOptional = studentRepository.findById(id);
