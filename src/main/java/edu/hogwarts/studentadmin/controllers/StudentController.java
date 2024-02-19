@@ -34,23 +34,10 @@ public class StudentController {
         return studentOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/house/{id}")
-    public ResponseEntity<List<Student>> getStudentsByHouse(@PathVariable int id) {
-        Optional<House> houseOptional = houseRepository.findById(id);
-
-        if (houseOptional.isPresent()) {
-            House house = houseOptional.get();
-            List<Student> students = house.getStudents();
-            return ResponseEntity.ok(students);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     // doesnt work with new house_id.. fix later
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student, @RequestParam(name = "house_id") int houseId) {
-        House house = houseRepository.findById(houseId).orElse(null);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        House house = houseRepository.findByName(student.getHouse().getName()).orElse(null);
 
         if (house != null) {
             student.setHouse(house);
@@ -64,26 +51,19 @@ public class StudentController {
     // doesnt work with new house_id.. fix later (nest house as an object in query and work from there)
     @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
-        Optional<Student> existingStudentOptional = studentRepository.findById(id);
+        try {
+            Optional<Student> existingStudentOptional = studentRepository.findById(id);
 
-        if (existingStudentOptional.isPresent()) {
-            Student existingStudent = existingStudentOptional.get();
-            existingStudent.setFirstName(updatedStudent.getFirstName());
-            existingStudent.setMiddleName(updatedStudent.getMiddleName());
-            existingStudent.setLastName(updatedStudent.getLastName());
-            existingStudent.setDateOfBirth(updatedStudent.getDateOfBirth());
-            existingStudent.setHouse(updatedStudent.getHouse());
-            existingStudent.setPrefect(updatedStudent.isPrefect());
-            existingStudent.setEnrollmentYear(updatedStudent.getEnrollmentYear());
-            existingStudent.setGraduationYear(updatedStudent.getGraduationYear());
-            existingStudent.setGraduated(updatedStudent.isGraduated());
-
-            studentRepository.save(existingStudent);
-            return ResponseEntity.ok(existingStudent);
-        } else {
-            updatedStudent.setId(id);
-            Student newStudent = studentRepository.save(updatedStudent);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newStudent);
+            if (existingStudentOptional.isPresent()) {
+                Student existingStudent = existingStudentOptional.get();
+                existingStudent.updateFrom(updatedStudent);
+                studentRepository.save(existingStudent);
+                return ResponseEntity.ok(existingStudent);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

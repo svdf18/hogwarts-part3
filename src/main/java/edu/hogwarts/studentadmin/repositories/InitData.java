@@ -6,169 +6,140 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class InitData implements CommandLineRunner {
 
-    private StudentRepository studentRepository;
-    private TeacherRepository teacherRepository;
-    private HouseRepository houseRepository;
-    private CourseRepository courseRepository;
+    private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
+    private final HouseRepository houseRepository;
+    private final CourseRepository courseRepository;
 
     public InitData(StudentRepository studentRepository,
                     TeacherRepository teacherRepository,
                     HouseRepository houseRepository,
-                    CourseRepository courseRepository){
+                    CourseRepository courseRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.houseRepository = houseRepository;
         this.courseRepository = courseRepository;
     }
 
-    public void run(String... args){
+    public void run(String... args) {
         System.out.println("InitData is running");
 
-        //INIT Houses
-        House house1 = new House();
-        house1.setName(House.HouseName.GRYFFINDOR);
-        house1.setFounder("Godric Gryffindor");
-        house1.setColors(List.of(House.HouseColors.RED, House.HouseColors.GOLD));
+        createHouses();
+        createStudents();
+        createTeachers();
+        createCourses();
+    }
+
+    private void createHouses() {
+        House house1 = new House("GRYFFINDOR", "Godric Gryffindor", "RED", "GOLD");
         houseRepository.save(house1);
 
-        House house2 = new House();
-        house2.setName(House.HouseName.HUFFLEPUFF);
-        house2.setFounder("Helga Hufflepuff");
-        house2.setColors(List.of(House.HouseColors.YELLOW, House.HouseColors.BLACK));
+        House house2 = new House("HUFFLEPUFF", "Helga Hufflepuff", "YELLOW", "BLACK");
         houseRepository.save(house2);
 
-        House house3 = new House();
-        house3.setName(House.HouseName.RAVENCLAW);
-        house3.setFounder("Rowena Ravenclaw");
-        house3.setColors(List.of(House.HouseColors.BLUE, House.HouseColors.SILVER));
+        House house3 = new House("RAVENCLAW", "Rowena Ravenclaw", "BLUE", "SILVER");
         houseRepository.save(house3);
 
-        House house4 = new House();
-        house4.setName(House.HouseName.SLYTHERIN);
-        house4.setFounder("Salazar Slytherin");
-        house4.setColors(List.of(House.HouseColors.GREEN, House.HouseColors.SILVER));
+        House house4 = new House("SLYTHERIN", "Salazar Slytherin", "GREEN", "SILVER");
         houseRepository.save(house4);
+    }
 
-        //INIT Students
-        Student student1 = new Student();
-        student1.setFirstName("Harry");
-        student1.setMiddleName("James");
-        student1.setLastName("Potter");
+
+    private void createStudents() {
+        House gryffindor = houseRepository.findByName("GRYFFINDOR").orElseThrow();
+        House hufflepuff = houseRepository.findByName("HUFFLEPUFF").orElseThrow();
+        House ravenclaw = houseRepository.findByName("RAVENCLAW").orElseThrow();
+        House slytherin = houseRepository.findByName("SLYTHERIN").orElseThrow();
+
+        Student student1 = new Student("Harry", "James", "Potter", gryffindor, 1991);
         student1.setDateOfBirth(LocalDate.of(1980, 7, 31));
-        student1.setHouse(house1);
         student1.setPrefect(true);
-        student1.setEnrollmentYear(1991);
         student1.setGraduationYear(1997);
         student1.setGraduated(true);
 
-        studentRepository.save(student1);
-
-        Student student2 = new Student();
-        student2.setFirstName("Cedric");
-        student2.setLastName("Diggory");
-        student2.setDateOfBirth(LocalDate.of(1979, 10, 1));
-        student2.setHouse(house2);
+        Student student2 = new Student("Hermione", "Jean", "Granger", gryffindor, 1991);
+        student2.setDateOfBirth(LocalDate.of(1979, 9, 19));
         student2.setPrefect(true);
-        student2.setEnrollmentYear(1991);
         student2.setGraduationYear(1997);
         student2.setGraduated(true);
 
-        studentRepository.save(student2);
-
-        Student student3 = new Student();
-        student3.setFirstName("Luna");
-        student3.setLastName("Lovegood");
-        student3.setDateOfBirth(LocalDate.of(1981, 2, 13));
-        student3.setHouse(house3);
-        student3.setPrefect(true);
-        student3.setEnrollmentYear(1991);
+        Student student3 = new Student("Ron", "Bilius", "Weasley", gryffindor, 1991);
+        student3.setDateOfBirth(LocalDate.of(1980, 3, 1));
+        student3.setPrefect(false);
         student3.setGraduationYear(1997);
         student3.setGraduated(true);
 
-        studentRepository.save(student3);
-
-        Student student4 = new Student();
-        student4.setFirstName("Draco");
-        student4.setMiddleName("Lucius");
-        student4.setLastName("Malfoy");
-        student4.setDateOfBirth(LocalDate.of(1980, 6, 5)); // June 5, 1980
-        student4.setHouse(house4);
+        Student student4 = new Student("Cedric", "", "Diggory", hufflepuff, 1991);
+        student4.setDateOfBirth(LocalDate.of(1979, 10, 1));
         student4.setPrefect(true);
-        student4.setEnrollmentYear(1991);
         student4.setGraduationYear(1997);
         student4.setGraduated(true);
 
-        studentRepository.save(student4);
+        Student student5 = new Student("Luna", "", "Lovegood", ravenclaw, 1991);
+        student5.setDateOfBirth(LocalDate.of(1981, 2, 13));
+        student5.setPrefect(true);
+        student5.setGraduationYear(1997);
+        student5.setGraduated(true);
 
-        //INIT Teachers
-        Teacher teacher1 = new Teacher();
-        teacher1.setFirstName("Minerva");
-        teacher1.setMiddleName("McGonagall");
-        teacher1.setLastName("McGonagall");
-        teacher1.setDateOfBirth(LocalDate.of(1935, 10, 4));
-        teacher1.setHouse("Gryffindor");
-        teacher1.setHeadOfHouse(true);
-        teacher1.setEmployment(EmpType.TENURED);
-        teacher1.setEmploymentStart(LocalDate.of(1956, 9, 1));
+        Student student6 = new Student("Draco", "Lucius", "Malfoy", slytherin, 1991);
+        student6.setDateOfBirth(LocalDate.of(1980, 6, 5));
+        student6.setPrefect(true);
+        student6.setGraduationYear(1997);
+        student6.setGraduated(true);
 
-        teacherRepository.save(teacher1);
+        Student student7 = new Student("Ginny", "Molly", "Weasley", gryffindor, 1991);
+        student7.setDateOfBirth(LocalDate.of(1981, 8, 11));
+        student7.setPrefect(true);
+        student7.setGraduationYear(1997);
+        student7.setGraduated(true);
 
-        Teacher teacher2 = new Teacher();
-        teacher2.setFirstName("Sybill");
-        teacher2.setMiddleName("Patricia");
-        teacher2.setLastName("Trelawney");
-        teacher2.setDateOfBirth(LocalDate.of(1963, 3, 9));
-        teacher2.setHouse("Ravenclaw");
-        teacher2.setHeadOfHouse(false);
-        teacher2.setEmployment(EmpType.TEMPORARY);
-        teacher2.setEmploymentStart(LocalDate.of(1995, 1, 15));
-        teacher2.setEmploymentEnd(LocalDate.of(1996, 12, 31));
+        Student student8 = new Student("Neville", "Frank", "Longbottom", gryffindor, 1991);
+        student8.setDateOfBirth(LocalDate.of(1980, 7, 30));
+        student8.setPrefect(false);
+        student8.setGraduationYear(1997);
+        student8.setGraduated(true);
 
-        teacherRepository.save(teacher2);
+        Student student9 = new Student("Lavender", "Isobel", "Brown", gryffindor, 1991);
+        student9.setDateOfBirth(LocalDate.of(1979, 5, 15));
+        student9.setPrefect(false);
+        student9.setGraduationYear(1997);
+        student9.setGraduated(true);
 
-        Teacher teacher3 = new Teacher();
-        teacher3.setFirstName("Pomona");
-        teacher3.setMiddleName("Sprout");
-        teacher3.setLastName("Sprout");
-        teacher3.setDateOfBirth(LocalDate.of(1941, 5, 15));
-        teacher3.setHouse("Hufflepuff");
-        teacher3.setHeadOfHouse(true);
-        teacher3.setEmployment(EmpType.DISCHARGED);
-        teacher3.setEmploymentStart(LocalDate.of(1969, 9, 1));
-        teacher3.setEmploymentEnd(LocalDate.of(1997, 6, 30));
+        Student student10 = new Student("Justin", "Finbar", "Finch-Fletchley", hufflepuff, 1991);
+        student10.setDateOfBirth(LocalDate.of(1980, 10, 1));
+        student10.setPrefect(false);
+        student10.setGraduationYear(1997);
+        student10.setGraduated(true);
 
-        teacherRepository.save(teacher3);
+        Student student11 = new Student("Parvati", "Padma", "Patil", gryffindor, 1991);
+        student11.setDateOfBirth(LocalDate.of(1979, 9, 20));
+        student11.setPrefect(false);
+        student11.setGraduationYear(1997);
+        student11.setGraduated(true);
 
-        Teacher teacher4 = new Teacher();
-        teacher4.setFirstName("Severus");
-        teacher4.setLastName("Snape");
-        teacher4.setDateOfBirth(LocalDate.of(1960, 1, 9));
-        teacher4.setHouse("Slytherin");
-        teacher4.setHeadOfHouse(false);
-        teacher4.setEmployment(EmpType.PROBATION);
-        teacher4.setEmploymentStart(LocalDate.of(1996, 9, 1));
-        teacher4.setEmploymentEnd(LocalDate.of(1997, 6, 30)); // Probationary period ended
+        Student student12 = new Student("Millicent", "", "Bulstrode", slytherin, 1991);
+        student12.setDateOfBirth(LocalDate.of(1979, 5, 1));
+        student12.setPrefect(false);
+        student12.setGraduationYear(1997);
+        student12.setGraduated(true);
 
-        teacherRepository.save(teacher4);
+        studentRepository.saveAll(List.of(
+                student1, student2, student3, student4, student5, student6,
+                student7, student8, student9, student10, student11, student12
+        ));
 
-        // INIT Courses
-        Course emptyCourse = new Course();
-        emptyCourse.setSubject("Empty Course");
-        emptyCourse.setSchoolYear(2024);
-        emptyCourse.setCurrent(true);
-        courseRepository.save(emptyCourse);
+    }
 
-        // INIT Populated Course
-        Course populatedCourse = new Course();
-        populatedCourse.setSubject("Populated Course");
-        populatedCourse.setSchoolYear(2024);
-        populatedCourse.setCurrent(true);
-        populatedCourse.setTeacher(teacher1);
-        populatedCourse.setStudents(List.of(student1, student2));
-        courseRepository.save(populatedCourse);
+    private void createTeachers() {
+        // Add teacher initialization logic here
+    }
+
+    private void createCourses() {
+        // Add course initialization logic here
     }
 }

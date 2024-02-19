@@ -9,7 +9,6 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
 
     private String firstName;
@@ -18,16 +17,24 @@ public class Student {
     private LocalDate dateOfBirth;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "house_id")
+    @JoinColumn(name = "house_name")
     private House house;
+
     private boolean prefect;
     private int enrollmentYear;
     private int graduationYear;
     private boolean graduated;
 
 
-
     public Student(){}
+
+    public Student(String firstName, String middleName, String lastName, House house, int enrollmentYear) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.house = house;
+        this.enrollmentYear = enrollmentYear;
+    }
 
     public int getId() {
         return id;
@@ -108,5 +115,8 @@ public class Student {
 
     public void setGraduated(boolean graduated) {
         this.graduated = graduated;
+    }
+
+    public void updateFrom(Student updatedStudent) {
     }
 }

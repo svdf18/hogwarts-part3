@@ -9,45 +9,31 @@ import java.util.List;
 @Entity
 public class House {
 
-    public enum HouseName {
-        GRYFFINDOR, HUFFLEPUFF, RAVENCLAW, SLYTHERIN;
-    }
-
-    public enum HouseColors {
-        RED, GOLD, YELLOW, BLACK, BLUE, SILVER, GREEN;
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Enumerated(EnumType.STRING)
-    private HouseName name;
+    private String name;
     private String founder;
-    @ElementCollection(targetClass = HouseColors.class)
-    @CollectionTable(name = "house_colors", joinColumns = @JoinColumn(name = "house_id"))
-    @Enumerated(EnumType.STRING)
-    private List<HouseColors> colors;
+    @JsonIgnore
+    private String color1;
+    @JsonIgnore
+    private String color2;
 
     @JsonIgnore
     @OneToMany(mappedBy = "house")
     private List<Student> students;
 
     public House(){};
-
-    public int getId() {
-        return id;
+    public House(String name, String founder, String color1, String color2) {
+        this.name = name;
+        this.founder = founder;
+        this.color1 = color1;
+        this.color2 = color2;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public HouseName getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(HouseName name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -59,12 +45,29 @@ public class House {
         this.founder = founder;
     }
 
-    public List<HouseColors> getColors() {
-        return colors;
+    public String getColor1() {
+        return color1;
     }
 
-    public void setColors(List<HouseColors> colors) {
-        this.colors = colors;
+    public void setColor1(String color1) {
+        this.color1 = color1;
+    }
+
+    public String getColor2() {
+        return color2;
+    }
+
+    public void setColor2(String color2) {
+        this.color2 = color2;
+    }
+
+    public String[] getColors(){
+        return new String[]{color1,color2};
+    }
+
+    public void setColors(String[] colors){
+        this.color1 = colors[0];
+        this.color2 = colors[1];
     }
 
     public List<Student> getStudents() {
