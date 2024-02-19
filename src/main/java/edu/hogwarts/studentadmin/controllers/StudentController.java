@@ -61,7 +61,7 @@ public class StudentController {
         }
     }
 
-    // doesnt work with new house_id.. fix later
+    // doesnt work with new house_id.. fix later (nest house as an object in query and work from there)
     @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
         Optional<Student> existingStudentOptional = studentRepository.findById(id);
