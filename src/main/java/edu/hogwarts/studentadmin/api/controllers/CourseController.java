@@ -1,4 +1,4 @@
-package edu.hogwarts.studentadmin.controllers;
+package edu.hogwarts.studentadmin.api.controllers;
 
 import edu.hogwarts.studentadmin.models.Course;
 import edu.hogwarts.studentadmin.models.Student;
