@@ -2,7 +2,9 @@ package edu.hogwarts.studentadmin.api.dto.students;
 
 import java.time.LocalDate;
 
-public class StudentDTO {
+public class StudentResponseDTO {
+
+    private int id;
     private String firstName;
     private String middleName;
     private String lastName;
@@ -13,6 +15,15 @@ public class StudentDTO {
     private int graduationYear;
     private boolean graduated;
     private int schoolYear;
+    private String fullName;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -92,5 +103,13 @@ public class StudentDTO {
 
     public void setSchoolYear(int schoolYear) {
         this.schoolYear = schoolYear;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
