@@ -2,30 +2,22 @@ package edu.hogwarts.studentadmin.api.controllers;
 
 import edu.hogwarts.studentadmin.api.dto.students.*;
 import edu.hogwarts.studentadmin.models.Student;
-import edu.hogwarts.studentadmin.repositories.StudentRepository;
 import edu.hogwarts.studentadmin.service.StudentService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentRepository studentRepository;
+
     private final StudentService studentService;
 
-    public StudentController(StudentRepository studentRepository,
-                             StudentService studentService) {
-        this.studentRepository = studentRepository;
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
-
-    // TODO: map, stream for findAll etc on studentDTO instead of student -> ryk det i service!
 
     @GetMapping
     public List<StudentResponseDTO> getAllStudents() {

@@ -9,10 +9,8 @@ import edu.hogwarts.studentadmin.repositories.StudentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,16 +24,6 @@ public class StudentService {
         this.studentRepository = studentRepository;
         this.houseRepository = houseRepository;
     }
-
-// TODO: Save, [find all] [find by id], [save  ]
-//    public List<StudentDTO> findAll(){
-//        return studentRepository.findAll().stream().map(this::toDTO).toList();
-//    }
-
-    // TODO: convert everything to DTOs, delete and update student(?)..
-    // StudentResponseDTO, StudentRequestDTO
-
-    //TODO: Saml alle StudentDTOS i den samme, overordnede og håndter fx PATCH fra servicelayer
 
     public List<StudentResponseDTO> getAllStudents() {
         return studentRepository.findAll().stream()
