@@ -6,10 +6,13 @@ import edu.hogwarts.studentadmin.models.House;
 import edu.hogwarts.studentadmin.models.Student;
 import edu.hogwarts.studentadmin.repositories.HouseRepository;
 import edu.hogwarts.studentadmin.repositories.StudentRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -98,6 +101,23 @@ public class StudentService {
         }
     }
 
+    public ResponseEntity<Student> patchStudent(int id, StudentRequestDTO patchStudentRequestDTO) {
+        Optional<Student> existingStudentOptional = studentRepository.findById(id);
+
+        if (existingStudentOptional.isPresent()) {
+            Student existingStudent = existingStudentOptional.get();
+            existingStudent.setPrefect(patchStudentRequestDTO.isPrefect());
+            existingStudent.setSchoolYear(patchStudentRequestDTO.getSchoolYear());
+            updateGraduationFields(existingStudent, patchStudentRequestDTO.getGraduationYear());
+
+            studentRepository.save(existingStudent);
+            return ResponseEntity.ok(existingStudent);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
     public ResponseEntity<Student> deleteStudent(int id) {
         Optional<Student> studentOptional = studentRepository.findById(id);
 
@@ -127,7 +147,7 @@ public class StudentService {
         return student;
     }
 
-    // Convert to response dto
+    // Convert Entity to ResponseDTO
     private StudentResponseDTO convertStudentToResponseDTO(Student student) {
         StudentResponseDTO responseDTO = new StudentResponseDTO();
         responseDTO.setId(student.getId());
@@ -163,5 +183,13 @@ public class StudentService {
         }
 
         return nameParts;
+    }
+
+    // Helper method to set graduated based on graduationYear
+    private void updateGraduationFields(Student student, Integer graduationYear) {
+        if (graduationYear != null) {
+            student.setGraduationYear(graduationYear);
+            student.setGraduated(graduationYear != 0);
+        }
     }
 }

@@ -46,64 +46,9 @@ public class StudentController {
         return studentService.updateStudent(id, updatedStudentRequestDTO);
     }
 
-    @PatchMapping ("/{id}/updatePrefect")
-    public ResponseEntity<Student> updatePrefect(@PathVariable int id, @RequestBody UpdatePrefectDTO updatePrefectDTO){
-        try {
-            Optional<Student> existingStudentOptional = studentRepository.findById(id);
-
-            if (existingStudentOptional.isPresent()) {
-                Student existingStudent = existingStudentOptional.get();
-                existingStudent.setPrefect(updatePrefectDTO.isPrefect());
-
-                studentRepository.save(existingStudent);
-                return ResponseEntity.ok(existingStudent);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    };
-
-    @PatchMapping("/{id}/updateSchoolYear")
-    public ResponseEntity<Student> updateSchoolYear(@PathVariable int id, @RequestBody UpdateSchoolYearDTO updateSchoolYearDTO){
-        try {
-            Optional<Student> existingStudentOptional = studentRepository.findById(id);
-
-            if(existingStudentOptional.isPresent()) {
-                Student existingStudent = existingStudentOptional.get();
-                existingStudent.setSchoolYear(updateSchoolYearDTO.getSchoolYear());
-
-                studentRepository.save(existingStudent);
-                return ResponseEntity.ok(existingStudent);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    };
-
-    @PatchMapping("/{id}/updateGraduation")
-    public ResponseEntity<Student> updateGraduation(@PathVariable int id, @RequestBody UpdateGraduationDTO updateGraduationDTO) {
-        try {
-            Optional<Student> existingStudentOptional = studentRepository.findById(id);
-
-            if (existingStudentOptional.isPresent()) {
-                Student existingStudent = existingStudentOptional.get();
-
-                existingStudent.setGraduationYear(updateGraduationDTO.getGraduationYear());
-
-                existingStudent.setGraduated(Objects.nonNull(updateGraduationDTO.getGraduationYear()));
-
-                studentRepository.save(existingStudent);
-                return ResponseEntity.ok(existingStudent);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+    @PatchMapping ("/{id}")
+    public ResponseEntity<Student> patchStudent(@PathVariable int id, @RequestBody StudentRequestDTO patchStudentRequestDTO) {
+        return studentService.patchStudent(id, patchStudentRequestDTO);
     }
 
     @DeleteMapping("/{id}")
