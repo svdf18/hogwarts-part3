@@ -1,5 +1,6 @@
 package edu.hogwarts.studentadmin.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -15,7 +16,10 @@ public class Teacher {
     private String middleName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String house;
+    @JsonIdentityReference(alwaysAsId = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "house_name")
+    private House house;
     private boolean headOfHouse;
     @Enumerated(EnumType.STRING)
     private EmpType employment;
@@ -26,6 +30,19 @@ public class Teacher {
     private int courseId;
 
     public Teacher(){};
+
+    public Teacher(String firstName, String middleName, String lastName, LocalDate dateOfBirth, House house, boolean headOfHouse, EmpType employment, LocalDate employmentStart, LocalDate employmentEnd, int courseId) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.house = house;
+        this.headOfHouse = headOfHouse;
+        this.employment = employment;
+        this.employmentStart = employmentStart;
+        this.employmentEnd = employmentEnd;
+        this.courseId = courseId;
+    }
 
     public int getId() {
         return id;
@@ -67,11 +84,11 @@ public class Teacher {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getHouse() {
+    public House getHouse() {
         return house;
     }
 
-    public void setHouse(String house) {
+    public void setHouse(House house) {
         this.house = house;
     }
 

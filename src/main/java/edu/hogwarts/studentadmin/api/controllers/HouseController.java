@@ -1,8 +1,11 @@
 package edu.hogwarts.studentadmin.api.controllers;
 
+import edu.hogwarts.studentadmin.api.dto.houses.HouseResponseDTO;
+import edu.hogwarts.studentadmin.api.dto.students.StudentResponseDTO;
 import edu.hogwarts.studentadmin.models.House;
 import edu.hogwarts.studentadmin.models.Student;
 import edu.hogwarts.studentadmin.repositories.HouseRepository;
+import edu.hogwarts.studentadmin.service.HouseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,28 +16,26 @@ import java.util.Optional;
 @RequestMapping("/houses")
 public class HouseController {
 
-    private final HouseRepository houseRepository;
 
-    public HouseController(HouseRepository houseRepository) {
-        this.houseRepository = houseRepository;
+    private final HouseService houseService;
+
+    public HouseController(HouseService houseService) {
+        this.houseService = houseService;
     }
 
     @GetMapping
-    public List<House> getAllHouses() {
-        return houseRepository.findAll();
+    public List<HouseResponseDTO> getAllHouses() {
+        return houseService.getAllHouses();
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<House> getHouseByName(@PathVariable String name) {
-        Optional<House> houseOptional = houseRepository.findByName(name.toUpperCase());
-
-        return houseOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<HouseResponseDTO> getHouseByName(@PathVariable String name) {
+        return houseService.getHouseByName(name);
     }
 
     @GetMapping("/{name}/students")
-    public ResponseEntity<List<Student>> getStudentsByHouseName(@PathVariable String name) {
-        Optional<House> houseOptional = houseRepository.findByName(name.toUpperCase());
-
-        return houseOptional.map(house -> ResponseEntity.ok(house.getStudents())).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<StudentResponseDTO>> getStudentsByHouseName(@PathVariable String name) {
+        List<StudentResponseDTO> studentResponseDTOs = houseService.getStudentsByHouseName(name);
+        return ResponseEntity.ok(studentResponseDTOs);
     }
 }

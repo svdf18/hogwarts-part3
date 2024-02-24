@@ -113,7 +113,19 @@ public class InitData implements CommandLineRunner {
     }
 
     private void createTeachers() {
-        // Add teacher initialization logic here
+        House gryffindor = houseRepository.findByName("GRYFFINDOR").orElseThrow();
+        House hufflepuff = houseRepository.findByName("HUFFLEPUFF").orElseThrow();
+        House ravenclaw = houseRepository.findByName("RAVENCLAW").orElseThrow();
+        House slytherin = houseRepository.findByName("SLYTHERIN").orElseThrow();
+
+        Teacher teacher1 = new Teacher("Minerva", "", "McGonagall", LocalDate.of(1935, 10, 4), gryffindor, true, EmpType.TENURED, LocalDate.of(1950, 10, 4), null, 0);
+        Teacher teacher2 = new Teacher("Pomona", "", "Sprout", LocalDate.of(1930, 5, 15), hufflepuff, true, EmpType.TEMPORARY, LocalDate.of(1950, 5, 15), null, 0);
+        Teacher teacher3 = new Teacher("Filius", "", "Flitwick", LocalDate.of(1935, 8, 17), ravenclaw, true, EmpType.TENURED, LocalDate.of(1950, 8, 17), null, 0);
+        Teacher teacher4 = new Teacher("Severus", "", "Snape", LocalDate.of(1950, 1, 9), slytherin, false, EmpType.PROBATION, LocalDate.of(1960, 1, 9), null, 0);
+
+        teacherRepository.saveAll(List.of(
+                teacher1, teacher2, teacher3, teacher4
+        ));
     }
 
     private void createCourses() {

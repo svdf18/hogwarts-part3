@@ -136,7 +136,7 @@ public class StudentService {
     }
 
     // Convert Entity to ResponseDTO
-    private StudentResponseDTO convertStudentToResponseDTO(Student student) {
+    public StudentResponseDTO convertStudentToResponseDTO(Student student) {
         StudentResponseDTO responseDTO = new StudentResponseDTO();
         responseDTO.setId(student.getId());
         responseDTO.setFirstName(student.getFirstName());
