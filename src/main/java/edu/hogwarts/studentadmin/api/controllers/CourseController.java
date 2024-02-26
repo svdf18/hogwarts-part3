@@ -1,11 +1,15 @@
-package edu.hogwarts.studentadmin.controllers;
+package edu.hogwarts.studentadmin.api.controllers;
 
+import edu.hogwarts.studentadmin.api.dto.courses.CourseResponseDTO;
+import edu.hogwarts.studentadmin.api.dto.students.StudentResponseDTO;
+import edu.hogwarts.studentadmin.api.dto.teachers.TeacherResponseDTO;
 import edu.hogwarts.studentadmin.models.Course;
 import edu.hogwarts.studentadmin.models.Student;
 import edu.hogwarts.studentadmin.models.Teacher;
 import edu.hogwarts.studentadmin.repositories.CourseRepository;
 import edu.hogwarts.studentadmin.repositories.StudentRepository;
 import edu.hogwarts.studentadmin.repositories.TeacherRepository;
+import edu.hogwarts.studentadmin.service.CourseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,49 +21,44 @@ import java.util.stream.Collectors;
 @RequestMapping("/courses")
 public class CourseController {
 
-    private CourseRepository courseRepository;
-    private TeacherRepository teacherRepository;
-    private StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
+    private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
+
+    private final CourseService courseService;
 
     public CourseController(CourseRepository courseRepository,
                             TeacherRepository teacherRepository,
-                            StudentRepository studentRepository){
+                            StudentRepository studentRepository,
+                            CourseService courseService){
         this.courseRepository = courseRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
+        this.courseService = courseService;
     }
 
     // get all courses
     @GetMapping
-    public List<Course> getAll(){
-        return courseRepository.findAll();
+    public List<CourseResponseDTO> getAllCourses(){
+        return courseService.getAllCourses();
     }
 
     // get course by id
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getById(@PathVariable int id){
-        Optional<Course> courseOptional = courseRepository.findById(id);
-        return courseOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<CourseResponseDTO> getById(@PathVariable int id){
+        return courseService.getCourseById(id);
     }
 
     // get teacher for a course
-    @GetMapping("{id}/teacher")
-    public ResponseEntity<Teacher> getTeacherByCourseId(@PathVariable int id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
-        return courseOptional.map (course -> {
-            Teacher teacher = course.getTeacher();
-            return ResponseEntity.ok(teacher);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/{id}/teacher")
+    public ResponseEntity<TeacherResponseDTO> getTeacherByCourseId(@PathVariable int id) {
+        return courseService.getTeacherByCourseId(id);
     }
 
     // get students for a course
     @GetMapping("{id}/students")
-    public ResponseEntity<List<Student>> getStudentsByCourseId(@PathVariable int id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
-        return courseOptional.map (course -> {
-            List<Student> students = course.getStudents();
-            return ResponseEntity.ok(students);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<StudentResponseDTO>> getStudentsByCourseId(@PathVariable int id) {
+        return courseService.getStudentsByCourseId(id);
     }
 
     // post new course

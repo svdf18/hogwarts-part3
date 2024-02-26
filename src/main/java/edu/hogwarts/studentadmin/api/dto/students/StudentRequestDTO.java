@@ -1,48 +1,21 @@
-package edu.hogwarts.studentadmin.models;
-
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import jakarta.persistence.*;
+package edu.hogwarts.studentadmin.api.dto.students;
 
 import java.time.LocalDate;
 
-@Entity
-public class Student {
+public class StudentRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String firstName;
     private String middleName;
     private String lastName;
     private LocalDate dateOfBirth;
-
-    @JsonIdentityReference(alwaysAsId = true)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "house_name")
-    private House house;
-
-
+    private String house;
     private boolean prefect;
     private int enrollmentYear;
     private int graduationYear;
     private boolean graduated;
-
     private int schoolYear;
-
-    public Student(){};
-
-    public Student(String firstName, String middleName, String lastName, House house, int enrollmentYear, int schoolYear, int graduationYear, boolean graduated) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.house = house;
-        this.enrollmentYear = enrollmentYear;
-        this.schoolYear = schoolYear;
-        this.graduationYear = graduationYear;
-        this.graduated = graduated;
-    }
-
+    private String fullName;
 
     public int getId() {
         return id;
@@ -84,11 +57,11 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public House getHouse() {
+    public String getHouse() {
         return house;
     }
 
-    public void setHouse(House house) {
+    public void setHouse(String house) {
         this.house = house;
     }
 
@@ -130,5 +103,13 @@ public class Student {
 
     public void setSchoolYear(int schoolYear) {
         this.schoolYear = schoolYear;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

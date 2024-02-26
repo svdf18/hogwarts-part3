@@ -1,56 +1,18 @@
-package edu.hogwarts.studentadmin.models;
-
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import jakarta.persistence.*;
+package edu.hogwarts.studentadmin.api.dto.teachers;
 
 import java.time.LocalDate;
 
-@Entity
-public class Teacher {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private int id;
+public class TeacherRequestDTO {
     private String firstName;
     private String middleName;
     private String lastName;
     private LocalDate dateOfBirth;
-    @JsonIdentityReference(alwaysAsId = true)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "house_name")
-    private House house;
+    private String house;
     private boolean headOfHouse;
-    @Enumerated(EnumType.STRING)
-    private EmpType employment;
+    private String employment;
     private LocalDate employmentStart;
     private LocalDate employmentEnd;
-
-    @Transient
     private int courseId;
-
-    public Teacher(){};
-
-    public Teacher(String firstName, String middleName, String lastName, LocalDate dateOfBirth, House house, boolean headOfHouse, EmpType employment, LocalDate employmentStart, LocalDate employmentEnd, int courseId) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
-        this.house = house;
-        this.headOfHouse = headOfHouse;
-        this.employment = employment;
-        this.employmentStart = employmentStart;
-        this.employmentEnd = employmentEnd;
-        this.courseId = courseId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -84,11 +46,11 @@ public class Teacher {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public House getHouse() {
+    public String getHouse() {
         return house;
     }
 
-    public void setHouse(House house) {
+    public void setHouse(String house) {
         this.house = house;
     }
 
@@ -100,11 +62,11 @@ public class Teacher {
         this.headOfHouse = headOfHouse;
     }
 
-    public EmpType getEmployment() {
+    public String getEmployment() {
         return employment;
     }
 
-    public void setEmployment(EmpType employment) {
+    public void setEmployment(String employment) {
         this.employment = employment;
     }
 
