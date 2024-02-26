@@ -1,0 +1,1 @@
+[![Build and deploy JAR app to Azure Web App - hogwarts-pt4](https://github.com/svdf18/hogwarts-part3/actions/workflows/part4dtocourses_hogwarts-pt4.yml/badge.svg)](https://github.com/svdf18/hogwarts-part3/actions/workflows/part4dtocourses_hogwarts-pt4.yml)
