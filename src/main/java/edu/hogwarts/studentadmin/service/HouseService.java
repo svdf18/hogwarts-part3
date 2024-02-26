@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class HouseService {
 
     private final HouseRepository houseRepository;
-    private final StudentService studentService; // Inject StudentService
+    private final StudentService studentService;
 
     public HouseService(HouseRepository houseRepository, StudentService studentService) {
         this.houseRepository = houseRepository;

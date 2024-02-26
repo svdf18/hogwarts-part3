@@ -135,7 +135,7 @@ public class StudentService {
         return student;
     }
 
-    // Convert Entity to ResponseDTO
+    // Convert a Student Entity to StudentResponseDTO
     public StudentResponseDTO convertStudentToResponseDTO(Student student) {
         StudentResponseDTO responseDTO = new StudentResponseDTO();
         responseDTO.setId(student.getId());
@@ -151,6 +151,13 @@ public class StudentService {
         responseDTO.setSchoolYear(student.getSchoolYear());
 
         return responseDTO;
+    }
+
+    // Convert a List of Student entities to a List of StudentResponseDTOs
+    public List<StudentResponseDTO> convertStudentsToResponseDTOList(List<Student> students) {
+        return students.stream()
+                .map(this::convertStudentToResponseDTO)
+                .collect(Collectors.toList());
     }
 
     // Helper method to extract first, middle, and last names

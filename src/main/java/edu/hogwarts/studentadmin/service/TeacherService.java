@@ -129,7 +129,7 @@ public class TeacherService {
     }
 
     // Convert Entity to ResponseDTO
-    private TeacherResponseDTO convertTeacherToResponseDTO(Teacher teacher) {
+    public TeacherResponseDTO convertTeacherToResponseDTO(Teacher teacher) {
         TeacherResponseDTO responseDTO = new TeacherResponseDTO();
         responseDTO.setId(teacher.getId());
         responseDTO.setFirstName(teacher.getFirstName());

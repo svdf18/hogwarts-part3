@@ -4,11 +4,21 @@ import java.util.List;
 
 public class CourseRequestDTO {
 
+    private int id;
     private String subject;
     private int schoolYear;
     private boolean current;
     private int teacherId;
     private List<Integer> studentId;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSubject() {
         return subject;

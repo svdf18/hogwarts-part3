@@ -2,7 +2,7 @@ package edu.hogwarts.studentadmin.api.dto.courses;
 
 import java.util.List;
 
-public class CoursesResponseDTO {
+public class CourseResponseDTO {
     private int id;
     private String subject;
     private int schoolYear;
